@@ -69,12 +69,13 @@ def printMenu():
 
 def optionTwo(cont):
     print("\nCargando información de transporte de singapur ....")
-    controller.loadServices(cont, servicefile)
+    answer = controller.loadServices(cont, servicefile)
     numedges = controller.totalConnections(cont)
     numvertex = controller.totalStops(cont)
     print('Numero de vertices: ' + str(numvertex))
     print('Numero de arcos: ' + str(numedges))
     print('El limite de recursion actual: ' + str(sys.getrecursionlimit()))
+    print('Tiempo de ejecucion: ' + str(answer[1]))
 
 
 def optionThree(cont):

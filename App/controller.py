@@ -24,6 +24,8 @@
  *
  """
 
+import time
+import tracemalloc
 import config as cf
 from App import model
 import csv
@@ -65,6 +67,11 @@ def loadServices(analyzer, servicesfile):
     addRouteConnection crea conexiones entre diferentes rutas
     servidas en una misma estación.
     """
+    delta_time = -1.0
+
+    tracemalloc.start()
+    start_time = getTime()
+
     servicesfile = cf.data_dir + servicesfile
     input_file = csv.DictReader(open(servicesfile, encoding="utf-8"),
                                 delimiter=",")
@@ -78,7 +85,13 @@ def loadServices(analyzer, servicesfile):
                 model.addStopConnection(analyzer, lastservice, service)
         lastservice = service
     model.addRouteConnections(analyzer)
-    return analyzer
+
+    stop_time = getTime()
+    tracemalloc.stop()
+
+    delta_time = stop_time - start_time
+
+    return (analyzer, delta_time)
 
 # ___________________________________________________
 #  Funciones para consultas
@@ -134,3 +147,7 @@ def servedRoutes(analyzer):
     """
     maxvert, maxdeg = model.servedRoutes(analyzer)
     return maxvert, maxdeg
+
+
+def getTime():
+    return float(time.perf_counter()*1000)
